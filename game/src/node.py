@@ -17,8 +17,8 @@ class Node:
         self.protection_possibility = protection
 
     def __str__(self) -> str:
-        return "{}, here you can use {}".format(self.name, self.protection_possibility)
+        return self.name
     
     def __repr__(self) -> str:
-        return self.__str__()
+        return "{}, here you can use {}".format(self.name, self.protection_possibility)
     

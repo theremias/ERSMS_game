@@ -1,7 +1,11 @@
+import sys
+
 from route import Crag
 from climber import Climber
 from node import Node, Protection_possibility
 from climbing_section import Climbing_section, Character
+
+
 
 class Game:
     """Class representing a game about climbing.
@@ -38,30 +42,34 @@ class Game:
     def is_lost(self) -> bool:
         return not self.climber.is_alive or ( self.route.is_blind(self.position) and not self.is_won() )
 
-    def is_quitted(self) -> bool:
-        return self.is_quitted
-    
     def quit_game(self) -> None:
-        self.is_quitted = True
+        print("You quitted the game.")
+        input("Press enter to quit")
+        sys.exit()
 
     def is_finished(self) -> bool:
-        return self.is_won() or self.is_lost() or self.is_quitted
+        return self.is_won() or self.is_lost()
     
     def show_help(self) -> None:
-        print("=== === === === === === HELP for game ERSMS === === === === === ===")
-        print("You are playing a game about climbing called ERSMS. The game is controlled via terminal.")
-        print("You can type several commands to progress in the game:")
-        print(" 0, 1, ...   for route options")
-        print(" h           to acces help")
-        print(" q           to quit the game")
-        print(" r           to restart the game - NOT IMPLEMENTED YET")
-        
+        result = ""
+        header = "=== === === === === === HELP for game ERSMS === === === === === ===\n"
+
+        row1 = "You are playing a game about climbing called ERSMS. The game is controlled via terminal.\n"
+        row2 = "You can type several commands to progress in the game:\n"
+        row3 = " 0, 1, ...   for route options\n"
+        row4 = " h           to access help\n"
+        row5 = " q           to quit the game\n"
+        row6 = " r           to restart the game - NOT IMPLEMENTED YET\n"
+        rows = row1 + row2 + row3 + row4 + row5 + row6
+
+        result = header + rows
+        print(result)
 
     def run(self) -> None:
         while True:
             if self.is_finished():
                 break
-            print("You are in node: ", self.position)
+            print("You are in node: ", repr(self.position))
             next_sections = self.route.sections_above(self.position)
             num_next_sec = len(next_sections)
             print("You can climb:")
@@ -73,9 +81,9 @@ class Game:
                 player_input = input("Choose one to climb ")
                 if player_input == "h":
                     self.show_help()
-                    break
+                    continue
                 if player_input == "q":
-                    self.quit_game
+                    self.quit_game()
                     break
                 
                 try:
@@ -90,11 +98,11 @@ class Game:
 
                 break
             
+            chosen_section = next_sections[choice]
 
-            next_section = next_sections[choice]
-
-            if self.climber.can_climb(next_section):
-                self.position = next_section.to_node
+            if self.climber.attempt_climb(chosen_section):
+                self.position = chosen_section.to_node
+                self.climber.gain_exp_section(chosen_section)
             else:
                 self.climber.die()
             # TODO: spadl a umrel > konec hry
@@ -103,8 +111,7 @@ class Game:
             print("VICTORY!")
         elif self.is_lost():
             print("Try again")
-        else:
-            print("You quitted the game.")
+            
 def main():
     game = Game()
     game.run()
