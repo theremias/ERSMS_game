@@ -15,6 +15,14 @@ class Node:
     def __init__(self, name: str, protection: Protection_possibility = Protection_possibility.NOTHING) -> None:
         self.name = name
         self.protection_possibility = protection
+        self.protection_used = False
+        self.heigth = 0
+
+    def use_protection(self) -> None:
+        self.protection_used = True
+
+    def change_height(self, new_height: int) -> None:
+        self.heigth = new_height
 
     def __str__(self) -> str:
         return self.name

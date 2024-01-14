@@ -25,17 +25,11 @@ class Climbing_section:
         # whether the section was climbed in current session (its important, because you can only return the way you climbed up)
         self.is_climbed = False
         
+    def change_is_climbed(self) -> None:
+        self.is_climbed = True
 
-    
     def __repr__(self) -> str:
         return "section from node {} to node {}, (str: {}, tech: {}, char: {}).".format(self.from_node, self.to_node, self.str_difficulty, self.tech_difficulty, self.character)
-    
-    def start_node(self):
-        pass
-
-    def end_node(self):
-        pass
-    
     
 
 def main():

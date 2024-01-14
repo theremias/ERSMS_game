@@ -16,11 +16,17 @@ class Game:
 
         bot1 = Node("BOT1")
         cra1 = Node("CRA1", Protection_possibility.BOLT)
+        cra1.change_height(2)
         cra2 = Node("CRA2", Protection_possibility.HOURGLASS)
+        cra2.change_height(5)
         cra3 = Node("CRA3", Protection_possibility.CRACK)
+        cra3.change_height(7)
         top1 = Node("TOP1", Protection_possibility.RING)
+        top1.change_height(12)
         bli1 = Node("BLI1", Protection_possibility.NOTHING)
+        bli1.change_height(6)
         sid1 = Node("SID1", Protection_possibility.CRACK)
+        sid1.change_height(6)
 
         sec1 = Climbing_section(bot1, cra1)
         sec2 = Climbing_section(cra1, cra2, str_diff=2, character=Character.CRIMPS) 
@@ -28,7 +34,7 @@ class Game:
         sec4 = Climbing_section(cra3, top1)
         sec5 = Climbing_section(cra1, bli1)
         sec6 = Climbing_section(cra2, sid1)
-        sec7 = Climbing_section(sid1, cra3)
+        sec7 = Climbing_section(sid1, cra3, 2, 3)
         route_list = [sec1, sec2, sec3, sec4, sec5, sec6, sec7]
 
         self.route = Crag(route_list, bot1, top1)
@@ -72,6 +78,20 @@ class Game:
             print("You are in node: ", repr(self.position))
             next_sections = self.route.sections_above(self.position)
             num_next_sec = len(next_sections)
+
+            if not (self.position.protection_possibility == Protection_possibility.NOTHING) and not self.position.protection_used:
+                print("Do you wish use a protection?")
+                while True:
+                    player_input = input("Do you wish use a protection? (y/n)")
+                    if player_input == "y":
+                        self.route.use_protection(self.position)
+                        break
+                    elif player_input == "n":
+                        break
+                    else:
+                        print("Invalid input")
+                        continue
+
             print("You can climb:")
             
             for i in range(num_next_sec):
@@ -99,13 +119,21 @@ class Game:
                 break
             
             chosen_section = next_sections[choice]
+            lastNode_prot_used = self.route.nodes_protected[-1]
 
             if self.climber.attempt_climb(chosen_section):
                 self.position = chosen_section.to_node
                 self.climber.gain_exp_section(chosen_section)
+                chosen_section.change_is_climbed()
+            elif lastNode_prot_used == self.position:
+                print("You failed to climb a section and now you're back at the begining of the section.")
+            elif self.position.heigth - lastNode_prot_used.heigth < 5:
+                self.position = lastNode_prot_used
+                print("You failed to climb a section and falled back to the last protection used")
             else:
                 self.climber.die()
-            # TODO: spadl a umrel > konec hry
+                print("You failed to climb a section and died while falling.")
+                # TODO: spadl a umrel > konec hry
 
         if self.is_won():
             print("VICTORY!")

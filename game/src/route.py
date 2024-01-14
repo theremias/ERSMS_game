@@ -1,5 +1,6 @@
 from node import Node, Protection_possibility
 from climbing_section import Climbing_section, Character
+from climber import Climber
 
 
 class Crag:
@@ -13,11 +14,8 @@ class Crag:
         self.sections_list = sections_list
         self.approach_node = approach_node
         self.summit_node = summit_node
-
-    def __str__(self) -> str:
-        num_sections = len(self.sections_list)
-        result = "You are on {} crag. There are {} climbing sections.".format(self.approach_node, num_sections)
-        return result
+        self.nodes_protected = []
+        self.use_protection(self.approach_node)
 
     def sections_above(self, current_node: Node) -> list[Climbing_section]:
         """Returns list of sections connected to 'current_node', wich are above the node.
@@ -45,6 +43,23 @@ class Crag:
         """Returns True if there are NO Climbing_sections above current_node, or False otherwise"""
         next_sec = self.sections_above(current_node)
         return len(next_sec) == 0
+    
+    def use_protection(self, current_node: Node) -> None:
+        """Appends a Node where climber used protection to the list of protected Nodes at current Crag"""
+        self.nodes_protected.append(current_node)
+        current_node.use_protection()
+        text = "You used {} in Node {}".format(current_node.protection_possibility, current_node)
+        print(text)
+
+    """def climb_section(self, section: Climbing_section, climber: Climber) -> None:
+        if climber.attempt_climb(section):
+            section.change_is_climbed()
+            self.used_protections.append"""
+    
+    def __str__(self) -> str:
+        num_sections = len(self.sections_list)
+        result = "You are on {} crag. There are {} climbing sections.".format(self.approach_node, num_sections)
+        return result
         
 def main():
     bot1 = Node("BOT1")
