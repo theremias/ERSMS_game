@@ -14,8 +14,7 @@ class Crag:
         self.sections_list = sections_list
         self.approach_node = approach_node
         self.summit_node = summit_node
-        self.nodes_protected = []
-        self.use_protection(self.approach_node)
+        self.nodes_protected = [approach_node]
 
     def sections_above(self, current_node: Node) -> list[Climbing_section]:
         """Returns list of sections connected to 'current_node', wich are above the node.
@@ -48,7 +47,7 @@ class Crag:
         """Appends a Node where climber used protection to the list of protected Nodes at current Crag"""
         self.nodes_protected.append(current_node)
         current_node.use_protection()
-        text = "You used {} in Node {}".format(current_node.protection_possibility, current_node)
+        text = "\nYou used {} in Node {}\n".format(current_node.protection_possibility, current_node)
         print(text)
 
     """def climb_section(self, section: Climbing_section, climber: Climber) -> None:

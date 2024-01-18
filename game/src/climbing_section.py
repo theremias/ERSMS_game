@@ -29,7 +29,7 @@ class Climbing_section:
         self.is_climbed = True
 
     def __repr__(self) -> str:
-        return "section from node {} to node {}, (str: {}, tech: {}, char: {}).".format(self.from_node, self.to_node, self.str_difficulty, self.tech_difficulty, self.character)
+        return "section from node {} to node {}, (str: {}, tech: {})".format(self.from_node, self.to_node, self.str_difficulty, self.tech_difficulty)
     
 
 def main():

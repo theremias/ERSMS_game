@@ -2,15 +2,20 @@ from random import random
 
 from climbing_section import Climbing_section, Character
 from node import Node, Protection_possibility
+from inventory import Inventory
 
 class Climber:
     """Climbing character.
     """
 
-    def __init__(self) -> None:
-        self.name = "Pepe"
+    def __init__(self, name: str = "Pepe", str_exp: int = 0, tech_exp: int = 0, prot_exp: int = 0) -> None:
+        self.name = name
         self.is_alive = True
-        self.experiences = {"strength": 0, "technique": 0, "protection": 0}
+        self.experiences = {"strength": str_exp, "technique": tech_exp, "protection": prot_exp}
+        self.inventory = Inventory()
+
+    def change_name(self, name: str) -> None:
+        self.name = name
     
     def get_strength(self) -> int:
         return self._get_ability("strength")
@@ -25,6 +30,9 @@ class Climber:
         self.experiences["strength"] += self._determine_experience(self.get_strength(), section.str_difficulty)
         self.experiences["technique"] += self._determine_experience(self.get_technique(), section.tech_difficulty)
 
+    def gain_exp_node(self, node: Node) -> None:
+        pass
+
     def attempt_climb(self, climbing_section: Climbing_section) -> bool:
         """Returns True if climber is able to climb a section, False if is NOT able.
         """
@@ -36,6 +44,9 @@ class Climber:
     def die(self) -> None:
         """Sets 'self.is_alive' to False."""
         self.is_alive = False
+
+    def _gain_inventory(self, thing: str, number: int) -> None:
+        pass
     
     def _determine_experience(self, ability: int, challenge: int) -> int:
         result = 0

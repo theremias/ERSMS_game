@@ -12,11 +12,11 @@ class Node:
     """A node in the climbing route. Nodes are connected with Climbing_sections.
     """
 
-    def __init__(self, name: str, protection: Protection_possibility = Protection_possibility.NOTHING) -> None:
+    def __init__(self, name: str, heigth: int, protection: Protection_possibility = Protection_possibility.NOTHING) -> None:
         self.name = name
         self.protection_possibility = protection
         self.protection_used = False
-        self.heigth = 0
+        self.heigth = heigth
 
     def use_protection(self) -> None:
         self.protection_used = True
@@ -28,5 +28,5 @@ class Node:
         return self.name
     
     def __repr__(self) -> str:
-        return "{}, here you can use {}".format(self.name, self.protection_possibility)
+        return "{}, here you can use {}\n".format(self.name, self.protection_possibility)
     
